@@ -3,7 +3,6 @@ plugins {
 }
 
 repositories {
-	mavenLocal()
 	maven {
 		url = 'https://repo.runelite.net'
 	}
@@ -11,19 +10,6 @@ repositories {
 }
 
 def runeLiteVersion = 'latest.release'
-
-// Strip out non-Windows-x64 LWJGL natives that don't exist in Maven local
-// and cause ArtifactNotFoundException on Windows dev machines
-configurations.all {
-	exclude group: 'org.lwjgl', module: 'lwjgl-opengl-natives-linux-arm64'
-	exclude group: 'org.lwjgl', module: 'lwjgl-natives-linux-arm64'
-	exclude group: 'org.lwjgl', module: 'lwjgl-opengl-natives-linux-aarch64'
-	exclude group: 'org.lwjgl', module: 'lwjgl-natives-linux-aarch64'
-	exclude group: 'org.lwjgl', module: 'lwjgl-opengl-natives-macos'
-	exclude group: 'org.lwjgl', module: 'lwjgl-natives-macos'
-	exclude group: 'org.lwjgl', module: 'lwjgl-opengl-natives-macos-arm64'
-	exclude group: 'org.lwjgl', module: 'lwjgl-natives-macos-arm64'
-}
 
 dependencies {
 	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
@@ -33,7 +19,7 @@ dependencies {
 
 	testImplementation 'junit:junit:4.12'
 	testImplementation 'org.mockito:mockito-core:3.1.0'
-    testImplementation 'com.google.inject.extensions:guice-testlib:4.1.0'
+	testImplementation 'com.google.inject.extensions:guice-testlib:4.1.0'
 	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
 	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
