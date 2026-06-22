@@ -60,8 +60,7 @@ task run(type: JavaExec, dependsOn: jar) {
 	mainClass = 'net.runelite.client.RuneLite'
 	jvmArgs '-ea',
 		"-Drunelite.pluginhub.version=${runeLiteVersion}",
-		'--add-opens=java.base/java.lang=ALL-UNNAMED',
-		'--add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED'
+		'--add-opens=java.base/java.lang=ALL-UNNAMED'
 }
 
 jar {
