@@ -35,3 +35,25 @@ java {
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
+
+// Builds a fat JAR with the plugin inside, then launches RuneLite with it loaded
+task run(type: JavaExec, dependsOn: jar) {
+	group = 'runelite'
+	description = 'Launch RuneLite with this plugin loaded'
+
+	classpath = configurations.testRuntimeClasspath + files(jar.archiveFile)
+
+	mainClass = 'net.runelite.client.RuneLite'
+
+	jvmArgs '-ea',
+		"-Drunelite.pluginhub.version=${runeLiteVersion}"
+}
+
+// Fat jar so RuneLite can find the plugin class
+jar {
+	manifest {
+		attributes(
+			'Implementation-Version': project.version
+		)
+	}
+}
