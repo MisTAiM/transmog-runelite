@@ -34,24 +34,38 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
+	// Allow Lombok annotation processor to access Java internals on Java 17+
+	options.forkOptions.jvmArgs += [
+		'--add-opens=java.base/java.lang=ALL-UNNAMED',
+		'--add-opens=java.base/java.lang.reflect=ALL-UNNAMED',
+		'--add-opens=java.base/java.util=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
+		'--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED',
+	]
+	options.fork = true
 }
 
 task run(type: JavaExec, dependsOn: jar) {
 	group = 'runelite'
 	description = 'Launch RuneLite with this plugin loaded'
-
 	classpath = configurations.testRuntimeClasspath + files(jar.archiveFile)
-
 	mainClass = 'net.runelite.client.RuneLite'
-
 	jvmArgs '-ea',
-		"-Drunelite.pluginhub.version=${runeLiteVersion}"
+		"-Drunelite.pluginhub.version=${runeLiteVersion}",
+		'--add-opens=java.base/java.lang=ALL-UNNAMED',
+		'--add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED'
 }
 
 jar {
 	manifest {
-		attributes(
-			'Implementation-Version': project.version
-		)
+		attributes('Implementation-Version': project.version)
 	}
 }
