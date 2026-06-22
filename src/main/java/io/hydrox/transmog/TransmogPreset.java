@@ -26,6 +26,7 @@ package io.hydrox.transmog;
 
 import io.hydrox.transmog.config.PresetParser;
 import io.hydrox.transmog.config.V2Parser;
+import net.runelite.api.PlayerComposition;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.client.game.ItemManager;
@@ -169,7 +170,7 @@ public class TransmogPreset
 		{
 			if (slot.getSlotType() == TransmogSlot.SlotType.ITEM)
 			{
-				return transmog + (forKit ? 512 : 0);
+				return transmog + (forKit ? PlayerComposition.ITEM_OFFSET : 0);
 			}
 
 			if (forKit)
