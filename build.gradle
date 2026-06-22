@@ -52,19 +52,30 @@ tasks.withType(JavaCompile).configureEach {
 	options.fork = true
 }
 
-task run(type: JavaExec, dependsOn: jar) {
+jar {
+	manifest {
+		attributes('Implementation-Version': project.version)
+	}
+}
+
+// Copy the built jar into RuneLite's sideloaded-plugins folder
+task installPlugin(type: Copy, dependsOn: jar) {
 	group = 'runelite'
-	description = 'Launch RuneLite with this plugin loaded'
-	classpath = configurations.testRuntimeClasspath + files(jar.archiveFile)
+	description = 'Install plugin jar into ~/.runelite/sideloaded-plugins/'
+	def sideloadDir = new File(System.getProperty('user.home'), '.runelite/sideloaded-plugins')
+	sideloadDir.mkdirs()
+	from jar.archiveFile
+	into sideloadDir
+}
+
+// Launch RuneLite in developer mode (plugin already in sideloaded-plugins)
+task run(type: JavaExec, dependsOn: installPlugin) {
+	group = 'runelite'
+	description = 'Install plugin and launch RuneLite in developer mode'
+	classpath = configurations.testRuntimeClasspath
 	mainClass = 'net.runelite.client.RuneLite'
 	jvmArgs '-ea',
 		'--add-opens=java.base/java.lang=ALL-UNNAMED',
 		'-Drunelite.pluginhub.version=1.12.29.1'
 	args '--developer-mode'
-}
-
-jar {
-	manifest {
-		attributes('Implementation-Version': project.version)
-	}
 }
