@@ -14,8 +14,8 @@ def runeLiteVersion = 'latest.release'
 dependencies {
 	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
 
-	compileOnly 'org.projectlombok:lombok:1.18.20'
-	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+	compileOnly 'org.projectlombok:lombok:1.18.36'
+	annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
 	testImplementation 'junit:junit:4.12'
 	testImplementation 'org.mockito:mockito-core:3.1.0'
@@ -36,7 +36,6 @@ tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
-// Builds a fat JAR with the plugin inside, then launches RuneLite with it loaded
 task run(type: JavaExec, dependsOn: jar) {
 	group = 'runelite'
 	description = 'Launch RuneLite with this plugin loaded'
@@ -49,7 +48,6 @@ task run(type: JavaExec, dependsOn: jar) {
 		"-Drunelite.pluginhub.version=${runeLiteVersion}"
 }
 
-// Fat jar so RuneLite can find the plugin class
 jar {
 	manifest {
 		attributes(
