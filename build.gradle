@@ -58,8 +58,8 @@ task run(type: JavaExec, dependsOn: jar) {
 	classpath = configurations.testRuntimeClasspath + files(jar.archiveFile)
 	mainClass = 'net.runelite.client.RuneLite'
 	jvmArgs '-ea',
-		"-Drunelite.pluginhub.version=${runeLiteVersion}",
-		'--add-opens=java.base/java.lang=ALL-UNNAMED'
+		'--add-opens=java.base/java.lang=ALL-UNNAMED',
+		'-Drunelite.pluginhub.version=1.12.29.1'
 	args '--developer-mode'
 }
 
