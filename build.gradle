@@ -34,7 +34,6 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
-	// Allow Lombok annotation processor to access Java internals on Java 17+
 	options.forkOptions.jvmArgs += [
 		'--add-opens=java.base/java.lang=ALL-UNNAMED',
 		'--add-opens=java.base/java.lang.reflect=ALL-UNNAMED',
@@ -61,6 +60,7 @@ task run(type: JavaExec, dependsOn: jar) {
 	jvmArgs '-ea',
 		"-Drunelite.pluginhub.version=${runeLiteVersion}",
 		'--add-opens=java.base/java.lang=ALL-UNNAMED'
+	args '--developer-mode'
 }
 
 jar {
