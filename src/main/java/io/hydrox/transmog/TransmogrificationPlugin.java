@@ -31,10 +31,10 @@ import io.hydrox.transmog.ui.UIManager;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.InventoryID;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.MenuEntry;
-import net.runelite.api.Varbits;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -165,7 +165,7 @@ public class TransmogrificationPlugin extends Plugin implements MouseWheelListen
 	 */
 	private void updatePvpState()
 	{
-		final boolean newState = client.getVarbitValue(Varbits.PVP_SPEC_ORB) == 1;
+		final boolean newState = client.getVarbitValue(VarbitID.PVP_AREA_CLIENT) == 1;
 
 		if (newState != transmogManager.isInPvpSituation())
 		{
@@ -213,7 +213,7 @@ public class TransmogrificationPlugin extends Plugin implements MouseWheelListen
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged e)
 	{
-		if (e.getContainerId() != InventoryID.EQUIPMENT.getId())
+		if (e.getContainerId() != InventoryID.WORN)
 		{
 			return;
 		}
@@ -236,7 +236,7 @@ public class TransmogrificationPlugin extends Plugin implements MouseWheelListen
 
 	private void updateEquipmentState()
 	{
-		ItemContainer ic = client.getItemContainer(InventoryID.EQUIPMENT);
+		ItemContainer ic = client.getItemContainer(InventoryID.WORN);
 
 		boolean emptyEquipment = ic == null ||
 			Arrays.stream(ic.getItems()).distinct().noneMatch(i -> i != null && i.getId() != -1);
@@ -426,7 +426,7 @@ public class TransmogrificationPlugin extends Plugin implements MouseWheelListen
 		{
 			return null;
 		}
-		return client.getLocalPlayer().getPlayerComposition().isFemale() ? BodyKit.FEMME : BodyKit.MASC;
+		return client.getLocalPlayer().getPlayerComposition().getGender() == 1 ? BodyKit.FEMME : BodyKit.MASC;
 	}
 
 	public UIManager getUIManager()
